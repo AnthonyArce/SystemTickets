@@ -12,31 +12,35 @@ namespace Sistema_Ticket_s
 {
     public partial class frmPrincipal : Form
     {
-        int[] asientos = new int[10]; // 0 libre - 1 reservado s/comida - 2 reservado c/comida
-        List<Label> labels;
-        List<Color> colores = new List<Color> { Color.Green, Color.Blue, Color.Red };
-        int asientoConComida = 0;
-        int asientosSinComida = 0;
-        int asientosDisponibles = 0;
+        #region Declaración de variables globales
+
+        int[] _asientos = new int[10]; // 0 libre - 1 reservado s/comida - 2 reservado c/comida
+        List<Label> _labels;
+        List<Color> _colores = new List<Color> { Color.Green, Color.Blue, Color.Red };
+        int _asientoConComida = 0;
+        int _asientosSinComida = 0;
+        int _asientosDisponibles = 0;
+
+        #endregion
 
 
 
         public frmPrincipal()
         {
             InitializeComponent();
-            labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
+            _labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
 
-            asientosDisponibles = asientos.Length;
-            prbCapacidad.Maximum = asientos.Length;
+            _asientosDisponibles = _asientos.Length;
+            prbCapacidad.Maximum = _asientos.Length;
 
-            actualizarCamposLbl(asientosDisponibles, asientoConComida, asientosSinComida);
+            actualizarCamposLbl(_asientosDisponibles, _asientoConComida, _asientosSinComida);
         }
 
         
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
-            cargarComboText(asientos);
+            cargarComboText(_asientos);
         }
 
 
@@ -49,23 +53,23 @@ namespace Sistema_Ticket_s
 
                 if (conComida)
                 {
-                    asientos[asientoSeleccionado - 1] = 2;
-                    asientoConComida++;
+                    _asientos[asientoSeleccionado - 1] = 2;
+                    _asientoConComida++;
                 }
                 else
                 {
-                    asientos[asientoSeleccionado - 1] = 1;
-                    asientosSinComida++;
+                    _asientos[asientoSeleccionado - 1] = 1;
+                    _asientosSinComida++;
                 }
 
-                asientosDisponibles--;
+                _asientosDisponibles--;
                 prbCapacidad.Value++;
 
-                if(asientosDisponibles == 0)
+                if(_asientosDisponibles == 0)
                     btnVender.Enabled = false;
 
-                cargarComboText(asientos);
-                actualizarCamposLbl(asientosDisponibles, asientoConComida, asientosSinComida);
+                ActualizarCampoVentas();
+                actualizarCamposLbl(_asientosDisponibles, _asientoConComida, _asientosSinComida);
             }
             else
             {
@@ -75,9 +79,9 @@ namespace Sistema_Ticket_s
 
         private void tabPage2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            for (int i = 0; i < asientos.Length; i++) 
+            for (int i = 0; i < _asientos.Length; i++) 
             {
-                labels[i].BackColor = colores[asientos[i]];
+                _labels[i].BackColor = _colores[_asientos[i]];
             }
         }
 
@@ -85,24 +89,35 @@ namespace Sistema_Ticket_s
 
         //Metodos Privados
 
-        private void cargarComboText(int[] asientos) 
+        private void cargarComboText(int[] _asientos) 
         {
             cboNumAsientos.Items.Clear();
             chkConComida.Checked = false;
             cboNumAsientos.Text = "Seleccione un asiento";
 
-            for (int i = 0; i < asientos.Length; i++)
+            for (int i = 0; i < _asientos.Length; i++)
             {
-                if (asientos[i] == 0)
+                if (_asientos[i] == 0)
                     cboNumAsientos.Items.Add((i + 1).ToString());
             }
         }
 
-        private void actualizarCamposLbl(int asientosDisponibles, int asientosConComida, int asientosSinComida) 
+        private void ActualizarCampoVentas()
         {
-            if(asientosDisponibles == asientos.Length) 
+            
+            chkConComida.Checked = false;
+            cboNumAsientos.Items.RemoveAt(cboNumAsientos.SelectedIndex);
+            cboNumAsientos.Text = "Seleccione un asiento";
+            
+        }
+
+
+
+        private void actualizarCamposLbl(int _asientosDisponibles, int asientosConComida, int _asientosSinComida) 
+        {
+            if(_asientosDisponibles == _asientos.Length) 
             {
-                lblCantAsientoDisp.Text = asientosDisponibles.ToString();
+                lblCantAsientoDisp.Text = _asientosDisponibles.ToString();
                 lblCantAsientoOcup.Text = "0";
                 lblCantComida.Text = "0";
                 lblTotalRecauSinComida.Text = "0";
@@ -110,10 +125,10 @@ namespace Sistema_Ticket_s
             }
             else 
             {
-                lblCantAsientoDisp.Text = asientosDisponibles.ToString();
-                lblCantAsientoOcup.Text = (asientosConComida + asientosSinComida).ToString();
+                lblCantAsientoDisp.Text = _asientosDisponibles.ToString();
+                lblCantAsientoOcup.Text = (asientosConComida + _asientosSinComida).ToString();
                 lblCantComida.Text = asientosConComida.ToString();
-                lblTotalRecauSinComida.Text = (asientosSinComida * 25500).ToString();
+                lblTotalRecauSinComida.Text = (_asientosSinComida * 25500).ToString();
                 lblTotalRecauConComida.Text = (asientosConComida * (25550 + 15000)).ToString();
             }
         }

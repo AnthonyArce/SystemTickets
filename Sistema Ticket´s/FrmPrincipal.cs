@@ -29,7 +29,6 @@ namespace Sistema_Ticket_s
         public frmPrincipal()
         {
             InitializeComponent();
-            //_labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
 
             _asientosDisponibles = _asientos.Length;
             prbCapacidad.Maximum = _asientos.Length;
@@ -47,12 +46,13 @@ namespace Sistema_Ticket_s
 
         private void btnVender_Click(object sender, EventArgs e)
         {
-            int estadoSeleccionado = 0;
-            int asientoSeleccionado = int.Parse(cboNumAsientos.Text);
-            bool conComida = chkConComida.Checked;
-
             if (cboNumAsientos.Text != "Seleccione un asiento")
             {
+                int estadoSeleccionado = 0;
+                int asientoSeleccionado = int.Parse(cboNumAsientos.Text);
+                bool conComida = chkConComida.Checked;
+
+            
 
                 if (conComida)
                 {
@@ -69,6 +69,7 @@ namespace Sistema_Ticket_s
 
                 _asientosDisponibles--;
                 prbCapacidad.Value++;
+
 
                 if(_asientosDisponibles == 0)
                     btnVender.Enabled = false;
@@ -94,7 +95,11 @@ namespace Sistema_Ticket_s
             for (int i = 0; i < _asientos.Length; i++)
             {
                 if (_asientos[i] == 0)
+                {
                     cboNumAsientos.Items.Add((i + 1).ToString());
+                    cambiarColorAsiento(i, 0);
+                }
+                    
             }
         }
 
@@ -115,7 +120,8 @@ namespace Sistema_Ticket_s
                 lblCantAsientoOcup.Text = "0";
                 lblCantComida.Text = "0";
                 lblTotalRecauSinComida.Text = "0";
-                lblTotalRecauConComida.Text = "0";
+                lblTotalRecauConComida.Text = "0"; 
+                lblPorcentajepgb.Text = "0%";
             }
             else 
             {
@@ -124,6 +130,7 @@ namespace Sistema_Ticket_s
                 lblCantComida.Text = asientosConComida.ToString();
                 lblTotalRecauSinComida.Text = (_asientosSinComida * 25500).ToString();
                 lblTotalRecauConComida.Text = (asientosConComida * (25550 + 15000)).ToString();
+                lblPorcentajepgb.Text = $"{((asientosConComida + _asientosSinComida) * 100)/ _asientos.Length }%";
             }
         }
 

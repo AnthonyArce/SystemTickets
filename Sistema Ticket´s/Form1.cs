@@ -27,8 +27,7 @@ namespace Sistema_Ticket_s
 
         public frmPrincipal()
         {
-            InitializeComponent();
-            _labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
+            InitializeComponent();            
 
             _asientosDisponibles = _asientos.Length;
             prbCapacidad.Maximum = _asientos.Length;

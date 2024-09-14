@@ -17,6 +17,7 @@ namespace Sistema_Ticket_s
         int[] _asientos = new int[10]; // 0 libre - 1 reservado s/comida - 2 reservado c/comida
         List<Label> _labels;
         List<Color> _colores = new List<Color> { Color.Green, Color.Blue, Color.Red };
+        enum Estado { sinComida = 1, conComida = 2 };
         int _asientoConComida = 0;
         int _asientosSinComida = 0;
         int _asientosDisponibles = 0;
@@ -28,12 +29,12 @@ namespace Sistema_Ticket_s
         public frmPrincipal()
         {
             InitializeComponent();
-            _labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
+            //_labels = new List<Label> { lblAsiento1 , lblAsiento2, lblAsiento3 , lblAsiento4, lblAsiento5, lblAsiento6, lblAsiento7, lblAsiento8, lblAsiento9, lblAsiento10 };
 
             _asientosDisponibles = _asientos.Length;
             prbCapacidad.Maximum = _asientos.Length;
 
-            actualizarCamposLbl(_asientosDisponibles, _asientoConComida, _asientosSinComida);
+            actualizarResumen(_asientosDisponibles, _asientoConComida, _asientosSinComida);
         }
 
         
@@ -46,20 +47,24 @@ namespace Sistema_Ticket_s
 
         private void btnVender_Click(object sender, EventArgs e)
         {
+            int estadoSeleccionado = 0;
+            int asientoSeleccionado = int.Parse(cboNumAsientos.Text);
+            bool conComida = chkConComida.Checked;
+
             if (cboNumAsientos.Text != "Seleccione un asiento")
             {
-                int asientoSeleccionado = int.Parse(cboNumAsientos.Text);
-                bool conComida = chkConComida.Checked;
 
                 if (conComida)
                 {
-                    _asientos[asientoSeleccionado - 1] = 2;
+                    _asientos[asientoSeleccionado - 1] = (int)Estado.conComida;
                     _asientoConComida++;
+                    estadoSeleccionado = (int)Estado.conComida;
                 }
                 else
                 {
-                    _asientos[asientoSeleccionado - 1] = 1;
+                    _asientos[asientoSeleccionado - 1] = (int)Estado.sinComida;
                     _asientosSinComida++;
+                    estadoSeleccionado = (int)Estado.sinComida;
                 }
 
                 _asientosDisponibles--;
@@ -69,7 +74,8 @@ namespace Sistema_Ticket_s
                     btnVender.Enabled = false;
 
                 ActualizarCampoVentas();
-                actualizarCamposLbl(_asientosDisponibles, _asientoConComida, _asientosSinComida);
+                actualizarResumen(_asientosDisponibles, _asientoConComida, _asientosSinComida);
+                cambiarColorAsiento(asientoSeleccionado, estadoSeleccionado);
             }
             else
             {
@@ -77,13 +83,13 @@ namespace Sistema_Ticket_s
             }
         }
 
-        private void tabPage2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            for (int i = 0; i < _asientos.Length; i++) 
-            {
-                _labels[i].BackColor = _colores[_asientos[i]];
-            }
-        }
+        //private void tabPage2_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    for (int i = 0; i < _asientos.Length; i++) 
+        //    {
+        //        _labels[i].BackColor = _colores[_asientos[i]];
+        //    }
+        //}
 
 
 
@@ -111,9 +117,7 @@ namespace Sistema_Ticket_s
             
         }
 
-
-
-        private void actualizarCamposLbl(int _asientosDisponibles, int asientosConComida, int _asientosSinComida) 
+        private void actualizarResumen(int _asientosDisponibles, int asientosConComida, int _asientosSinComida) 
         {
             if(_asientosDisponibles == _asientos.Length) 
             {
@@ -130,6 +134,20 @@ namespace Sistema_Ticket_s
                 lblCantComida.Text = asientosConComida.ToString();
                 lblTotalRecauSinComida.Text = (_asientosSinComida * 25500).ToString();
                 lblTotalRecauConComida.Text = (asientosConComida * (25550 + 15000)).ToString();
+            }
+        }
+
+        private void cambiarColorAsiento(int indiceAsiento,int estado) 
+        {
+            foreach(Control c in this.Controls)
+            {
+                if(c is Label)
+                {
+                    if(c.TabIndex == indiceAsiento)
+                    {
+                        c.BackColor = _colores[estado];
+                    }
+                }
             }
         }
     }

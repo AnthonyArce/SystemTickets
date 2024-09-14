@@ -84,7 +84,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(355, 339);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabPage2_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -391,7 +390,7 @@
             this.lblAsiento1.Margin = new System.Windows.Forms.Padding(3);
             this.lblAsiento1.Name = "lblAsiento1";
             this.lblAsiento1.Size = new System.Drawing.Size(14, 16);
-            this.lblAsiento1.TabIndex = 0;
+            this.lblAsiento1.TabIndex = 1;
             this.lblAsiento1.Text = "1";
             // 
             // label1
@@ -402,7 +401,7 @@
             this.label1.Location = new System.Drawing.Point(242, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(268, 31);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Sistemas de tickets";
             // 
             // grpResumen
